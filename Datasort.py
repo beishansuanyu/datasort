@@ -85,7 +85,7 @@ def write32(item,k,t_temp):
 
         y = y/m1*fullscale
 
-        str1 = '\t'.join([str(t_temp), str(y)])+'\n'
+        str1 = '\t'.join([str(t_temp/fs), str(y)])+'\n'
         item.write(str1)
 
         k = k+4
@@ -127,6 +127,7 @@ def match_example(item,m1):
 
 pattern = b'\x1a\xcf\xfc\x1d'
 n = 0
+print('\r'+"解析进度（MB):")
 while n <eof:
     m = data.find(pattern,n,eof)
     if m != -1:
@@ -136,13 +137,12 @@ while n <eof:
     else:
         break
     n=m+2184
-
-
+    print('\r' + "{:.2f}".format(n/1000000)+'/'+"{:.2f}".format(eof/1000000), end='', flush=True)
 
 while file in files:
     file.close()
 
 
-print("helloworld")
+print('\r'+"Process  Done")
 
 # result = struct.unpack('format string', data)
