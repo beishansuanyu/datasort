@@ -6,10 +6,31 @@ from tkinter import filedialog
 import os
 import math
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QPlainTextEdit, QMessageBox,QTextBrowser
+import keyboard
+import threading
 from PySide6.QtGui import QTextCursor
 import sys
 
+class myThread (threading.Thread):
+    def __init__(self, threadID, name, delay):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.delay = delay
+    def run(self):
+        main()
 
+class myThread1 (threading.Thread):
+    def __init__(self, threadID, name, delay):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.delay = delay
+    def run(self):
+        while True:
+            if keyboard.is_pressed('escape'):
+                print('程序退出')
+                break
 
 def main():
     # 处理原始数据dat
@@ -216,11 +237,11 @@ def main():
                         break
                     n = m + 2184
                     # 窗口显示解析进度start
-                    if show_cnt <=1000:
-                        show_cnt +=1
-                    else:
-                        self.show("{:.2f}".format(n / 1000000) + '/' + "{:.2f}".format(eof / 1000000))
-                        show_cnt = 0
+                    # if show_cnt <=1000:
+                    #     show_cnt +=1
+                    # else:
+                    self.show("{:.2f}".format(n / 1000000) + '/' + "{:.2f}".format(eof / 1000000))
+                        # show_cnt = 0
                     # end
 
                     print('\r' + "{:.2f}".format(n / 1000000) + '/' + "{:.2f}".format(eof / 1000000), end='',
@@ -352,5 +373,12 @@ def dataannalyses(file):
 
 
 if __name__ == "__main__":
-
     main()
+
+    # thread1 = myThread1(1, "Thread-1", 1)
+    # thread2 = myThread(2, "Thread-2", 2)
+    # thread2.daemon = True
+    # thread1.start()
+    # thread2.start()
+    # thread1.join()
+    # print("退出主线程")
