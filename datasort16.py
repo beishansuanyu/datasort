@@ -26,7 +26,7 @@ fs = 50000
 f = open(file_name+"处理后结果.dat", "wb+")
 f0 = open("数字通道1数据.dat",'wb')
 f1 = open("数字通道2数据.dat",'wb')
-f2 = open("模拟通道数据数据.txt",'w+')
+f2 = open("模拟通道数据数据20250728.txt",'w+')
 f2.write('时间')
 for i in range(16):
     f2.write('\t'+'通道'+str(i+1))
@@ -41,22 +41,22 @@ def write(item):
     a =0
     for i in range(16):
         dat = item[a:a+2]
-        dat = int.from_bytes(dat, byteorder='big')
-        x = dat & 0x8000
-        y = dat & 0x7fff
+        dat = int.from_bytes(dat, byteorder='big', signed=True)
+        # x = dat & 0x8000
+        # y = dat & 0x7fff
         m = 2 ** 15
-        if x == 0:
-            y = y
-        else:
-            y = y - m
-        match i:
-            case 0 | 2| 12| 14 :
-                y = y*2.2
-            case 1| 3| 4| 5| 6| 7| 8| 9| 10| 11| 13| 15:
-                y = y
-            case _:
-                print('匹配到其他通道')
-        y = y / m * 10
+        # if x == 0:
+        #     y = y
+        # else:
+        #     y = y - m
+        # match i:
+        #     case 0 | 2| 12| 14 :
+        #         y = y*1
+        #     case 1| 3| 4| 5| 6| 7| 8| 9| 10| 11| 13| 15:
+        #         y = y
+        #     case _:
+        #         print('匹配到其他通道')
+        y = dat / m * 10
         formatted_num = '{:.6f}'.format(y)
         str1 = '\t'+ str(formatted_num)
         f2.write(str1)
