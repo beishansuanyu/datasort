@@ -38,7 +38,7 @@ f7 = open("通道8数据.txt",'w+')
 files = [f,f0,f1,f2,f3,f4,f5,f6,f7]
 
 
-fs = 1000000
+fs = 500000
 def write16(item,k,t_temp):
     i = 0
     while i <= 1087:
@@ -68,22 +68,15 @@ def write16(item,k,t_temp):
 def write32(item,k,t_temp):
     i = 0
     while i <= 543:
-        dat_b = data[k:k+4]
-        dat = int.from_bytes(dat_b, byteorder='big')
+        dat_b = data[k:k+3]
+        dat = int.from_bytes(dat_b, byteorder='big',signed=True)
 
         t_temp = t_temp + 1
-        m1 = 2**17
+        m1 = 2**23
 
-        x = dat & 0x00008000
-        y1 = dat & 0x30000000
-        y2 = dat & 0x00007fff
-        y = (y2<<2) + (y1>>30)
 
-        if x == 0 :
-            y = y
-        else:    y= y-m1
 
-        y = y/m1*fullscale
+        y = dat/m1*fullscale
 
         str1 = '\t'.join([str(t_temp/fs), str(y)])+'\n'
         item.write(str1)
@@ -100,13 +93,13 @@ def match_example(item,m1):
             t_temp1=write32(f0, m1,t_temp1)
         case 1:
             global t_temp2
-            t_temp2=write32(f1, m1,t_temp2)
+            t_temp2=write16(f1, m1,t_temp2)
         case 2:
             global t_temp3
-            t_temp3=write16(f2, m1,t_temp3)
+            t_temp3=write32(f2, m1,t_temp3)
         case 3:
             global t_temp4
-            t_temp4=write16(f3, m1,t_temp4)
+            t_temp4=write32(f3, m1,t_temp4)
         case 4:
             global t_temp5
             t_temp5=write16(f4, m1,t_temp5)
@@ -120,7 +113,9 @@ def match_example(item,m1):
             global t_temp8
             t_temp8=write16(f7, m1,t_temp8)
         case _:
-            print("匹配到其他情况")
+            None
+            # print("匹配到其他情况")
+
 
 
 
