@@ -66,21 +66,22 @@ def write32(item,k,t_temp):
     i = 0
     while i <= 543:
         dat_b = data[k:k+4]
-        dat = int.from_bytes(dat_b, byteorder='big')
+        dat = int.from_bytes(dat_b, byteorder='big', signed=True)
+        t_temp = t_temp + 1
+        dat = dat /2**14
 
         t_temp = t_temp + 1
         m1 = 2**17
 
-        x = dat & 0x00008000
-        y1 = dat & 0x30000000
-        y2 = dat & 0x00007fff
-        y = (y2<<2) + (y1>>30)
 
-        if x == 0 :
-            y = y
-        else:    y= y-m1
+        # # y2 = dat & 0x00007fff
+        # # y = (y2<<2) + (y1>>30)
+        #
+        # if dat <= m1-1 :
+        #     y = dat
+        # else:    y= dat-m1
 
-        y = y/m1*10
+        y = dat/m1*10
 
         str1 = '\t'.join([str(t_temp), str(y)])+'\n'
         item.write(str1)

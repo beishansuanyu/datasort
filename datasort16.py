@@ -34,7 +34,7 @@ time0 = [0]
 time1 = [0]
 time3 = [0]
 time4 = [0]
-f2 = open("模拟通道数据数据20250728.txt",'w+')
+f2 = open("模拟通道数据数据005.txt",'w+')
 f2.write('时间')
 for i in range(16):
     f2.write('\t'+'通道'+str(i+1))
@@ -45,10 +45,12 @@ files = [f,f0,f1,f2]
 times = [time0,time1,time3,time4]
 
 
-def write(item):
+def write(item,m1):
+    range1 = m1/2-1
+    range1 = int(range1)
     f2.write(str('{:.6f}'.format(t_temp1)))
     a =0
-    for i in range(16):
+    for i in range(range1):
         dat = item[a:a+2]
         dat = int.from_bytes(dat, byteorder='big', signed=True)
         # x = dat & 0x8000
@@ -82,14 +84,40 @@ def match_example(item):
     n=0
     while n <2183:
 
-        m = item.find(pattern1, n, 2183)
+        m = item.find(pattern1, n, 2184)
+        m1 = item.find(pattern1, m+2, 2184)
+
+        # if m != -1:
+        #     if m1 - m == 34:
+        #
+        #         write(item[m+2:m+34],m1-m)
+        #         global t_temp1
+        #         t_temp1 += 1 / fs
+        # else:
+        #     break
+
+
+        #     if m1 - m == 34:
+        #
+        #         write(item[m+2:m+34],m1-m)
+        #         global t_temp1
+        #         t_temp1 += 1 / fs
+
+
         if m != -1:
-            write(item[m+2:m+34])
+            if m1!=-1:
+
+                write(item[m+2:m+34],m1-m)
+
+
+            else :
+                write(item[m+2:m+34],2184-m)
+
             global t_temp1
-            t_temp1 += 1/fs
+            t_temp1 += 1 / fs
         else:
             break
-        n = m+34
+        n = m+2
 
 
 
@@ -128,9 +156,9 @@ while n <eof:
     n=m+2184
     print('\r' + "{:.2f}".format(n / 1000000) + '/' + "{:.2f}".format(eof / 1000000), end='', flush=True)
 i =1
-for t in times:
-    f5.write(f"通道{i}开始时间：{t[1]}"+'\n')
-    i += 1
+# for t in times:
+#     f5.write(f"通道{i}开始时间：{t[1]}"+'\n')
+#     i += 1
 
 
 
