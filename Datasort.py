@@ -5,7 +5,7 @@ from base64 import encode
 from tkinter import filedialog
 import os
 
-fullscale = 10
+fullscale = 5
 dvidide = 5.5
 root = tk.Tk()
 root.withdraw()
@@ -38,7 +38,7 @@ f7 = open("通道8数据.txt",'w+')
 files = [f,f0,f1,f2,f3,f4,f5,f6,f7]
 
 
-fs = 500000
+fs = 100000
 def write16(item,k,t_temp):
     i = 0
     while i <= 1087:
@@ -58,7 +58,7 @@ def write16(item,k,t_temp):
 
         y = y / m * fullscale
 
-        str1 = '\t'.join([str(t_temp), str(y)]) + '\n'
+        str1 = '\t'.join([str(t_temp/fs), str(y)]) + '\n'
         item.write(str1)
         k = k+2
         i = i+1
@@ -90,16 +90,16 @@ def match_example(item,m1):
     match item:
         case 0:
             global t_temp1
-            t_temp1=write32(f0, m1,t_temp1)
+            t_temp1=write16(f0, m1,t_temp1)
         case 1:
             global t_temp2
             t_temp2=write16(f1, m1,t_temp2)
         case 2:
             global t_temp3
-            t_temp3=write32(f2, m1,t_temp3)
+            t_temp3=write16(f2, m1,t_temp3)
         case 3:
             global t_temp4
-            t_temp4=write32(f3, m1,t_temp4)
+            t_temp4=write16(f3, m1,t_temp4)
         case 4:
             global t_temp5
             t_temp5=write16(f4, m1,t_temp5)
@@ -108,7 +108,7 @@ def match_example(item,m1):
             t_temp6=write16(f5, m1,t_temp6)
         case 6:
             global t_temp7
-            t_temp7=write16(f7, m1,t_temp7)
+            t_temp7=write16(f6, m1,t_temp7)
         case 7:
             global t_temp8
             t_temp8=write16(f7, m1,t_temp8)
